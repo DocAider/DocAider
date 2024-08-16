@@ -27,8 +27,8 @@ jobs:
         run: |
           cp -r website/dist/* ../repo-website
           cd ../repo-website
-          git config user.name "GitHub Actions"
-          git config user.email "<>"
+          git config --local user.email "github-actions@github.com"
+          git config --local user.name "github-actions"
           git add .
           if git commit -m "Update website"; then
             git push https://${{ secrets.TOKEN }}@github.com/repocopilot/repocopilot.github.io.git HEAD:main
