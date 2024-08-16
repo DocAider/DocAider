@@ -1,4 +1,33 @@
-cp -r website/dist/* ../repo-website
+name: Deploy Website
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Clone website repository
+        run: git clone https://github.com/repocopilot/repocopilot.github.io.git ../repo-website
+
+      - name: Install dependencies
+        run: cd website && npm ci
+
+      - name: Build website
+        run: cd website && npm run build
+
+      - name: Commit and push changes
+        env:
+          TOKEN: ${{ secrets.TOKEN }}
+        run: |
+          cp -r website/dist/* ../repo-website
           cd ../repo-website
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
